@@ -1,0 +1,11 @@
+http://station:80 {
+  redir /plex /plex/
+  reverse_proxy /plex/* <METABASE_IP>:32400
+
+  redir /test /test/
+  reverse_proxy /test/* localhost:3001
+}
+
+:3001 {
+  respond "reverse works great"
+}

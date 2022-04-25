@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  tailscale:
+    hostname: station
+    image: "tailscale/tailscale:stable"
+    volumes:
+      - "./tailscale_var_lib:/var/lib"  # State data
+      - "/dev/net/tun:/dev/net/tun"
+    cap_add:        
+      - net_admin                          
+      - sys_module
+    command: tailscaled
+  caddy:
+    image: "caddy:latest"
+    network_mode: service:tailscale
+    volumes:
+      - './Caddyfile:/etc/caddy/Caddyfile'
+      - "./caddy_data:/data"
+      - "./caddy_config:/config"
