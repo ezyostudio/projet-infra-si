@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  tailscale:
+    hostname: station
+    image: "tailscale/tailscale:stable"
+    volumes:
+      - "./tailscale_var_lib:/var/lib"        # State data will be stored in this directory
+      - "/dev/net/tun:/dev/net/tun"           # Required for tailscale to work
+    cap_add:                                    # Required for tailscale to work
+      - net_admin
+      - sys_module
+    command: tailscaled
+  caddy:
+    image: "caddy:latest"
+    network_mode: service:tailscale
