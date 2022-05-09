@@ -20,5 +20,4 @@ services:
 
 networks: 
   default: 
-    external: 
-      name: infra-si
+    name: infra-si
