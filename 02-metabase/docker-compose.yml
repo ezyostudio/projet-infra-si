@@ -1,19 +1,26 @@
 version: "3.9"
 services:
   plex:
-    image: lscr.io/linuxserver/plex
+    image: plexinc/pms-docker
     container_name: plex
-    network_mode: host
+    ports:
+        - '32400:32400/tcp'
+        - '3005:3005/tcp'
+        - '8324:8324/tcp'
+        - '32469:32469/tcp'
+        - '1900:1900/udp'
+        - '32410:32410/udp'
+        - '32412:32412/udp'
+        - '32413:32413/udp'
+        - '32414:32414/udp'
     environment:
-      - PUID=1000
-      - PGID=1000
-      - VERSION=docker
-      - PLEX_CLAIM= #optional
+        - TZ=<timezone>
+        - PLEX_CLAIM=<claimToken>
+        - ADVERTISE_IP=http://station/
     volumes:
-      - ./plex:/config
-      - ./data/tvseries:/tv
-      - ./data/movies:/movies
-    restart: unless-stopped
+        - ./plex/config:/config
+        - ./plex/transcode:/transcode
+        - ./medias:/movies
   radarr:
     image: linuxserver/radarr
     container_name: radarr
@@ -24,21 +31,22 @@ services:
     volumes:
       - ./scripts:/scripts
       - ./radarr/config:/config
-      - ./data/movies:/movies #optional
+      - ./medias:/movies #optional
       - ./radarr/downloads:/downloads #optional
     ports:
       - 7878:7878
     restart: unless-stopped
   sonarr:
-    image: lscr.io/linuxserver/sonarr
+    image: linuxserver/sonarr
     container_name: sonarr
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/London
     volumes:
+      - ./scripts:/scripts
       - ./sonarr/config:/config
-      - ./data/tvseries:/tv #optional
+      - ./medias:/tv #optional
       - ./sonarr/downloads:/downloads #optional
     ports:
       - 8989:8989
