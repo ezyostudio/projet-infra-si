@@ -13,3 +13,45 @@ services:
   caddy:
     image: "caddy:latest"
     network_mode: service:tailscale
+  plex:
+    image: lscr.io/linuxserver/plex
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - VERSION=docker
+      - PLEX_CLAIM= #optional
+    volumes:
+      - ./plex:/config
+      - ./data/tvseries:/tv
+      - ./data/movies:/movies
+    restart: unless-stopped
+  radarr:
+    image: lscr.io/linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - ./radarr/config:/config
+      - ./data/movies:/movies #optional
+      - ./radarr/downloads:/downloads #optional
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+  sonarr:
+    image: lscr.io/linuxserver/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - ./sonarr/config:/config
+      - ./data/tvseries:/tv #optional
+      - ./sonarr/downloads:/downloads #optional
+    ports:
+      - 8989:8989
+    restart: unless-stopped
