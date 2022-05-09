@@ -10,9 +10,6 @@ services:
       - net_admin
       - sys_module
     command: tailscaled
-  caddy:
-    image: "caddy:latest"
-    network_mode: service:tailscale
   plex:
     image: lscr.io/linuxserver/plex
     container_name: plex
