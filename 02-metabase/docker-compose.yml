@@ -15,13 +15,14 @@ services:
       - ./data/movies:/movies
     restart: unless-stopped
   radarr:
-    image: lscr.io/linuxserver/radarr
+    image: linuxserver/radarr
     container_name: radarr
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/London
     volumes:
+      - ./scripts:/scripts
       - ./radarr/config:/config
       - ./data/movies:/movies #optional
       - ./radarr/downloads:/downloads #optional
