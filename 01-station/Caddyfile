@@ -1,9 +1,22 @@
 http://station:80 {
-  redir /plex /plex/
-  reverse_proxy /plex/* <METABASE_IP>:32400
-
   redir /test /test/
   reverse_proxy /test/* localhost:3001
+
+  redir /tailscale /tailscale/
+  reverse_proxy /tailscale/* localhost:8088
+
+  redir /radarr /radarr/
+  reverse_proxy /radarr/* radarr:7878
+  
+  redir /sonarr /sonarr/
+  reverse_proxy /sonarr/* sonarr:8989
+
+  redir / /web/
+  reverse_proxy plex:32400
+
+  # proxy /plex plex:32400/web/ {
+  #   transparent
+  # }
 }
 
 :3001 {
