@@ -23,10 +23,20 @@ http://station:80 {
   respond "reverse works great"
 }
 
+# Time Machine
+
 :139 {
   reverse_proxy timemachine:139
 }
 
 :445 {
   reverse_proxy timemachine:445
+}
+
+:137 {
+  reverse_proxy timemachine:137
+}
+
+:138 {
+  reverse_proxy timemachine:138
 }

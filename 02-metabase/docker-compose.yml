@@ -5,12 +5,14 @@ services:
       container_name: timemachine
       restart: always
       ports:
+        - '138:138/udp'
+        - '137:137/udp'
         - '139:139'
         - '445:445'
       volumes:
         - './timemachine/samba.conf:/samba.conf'
         - './timemachine/data:/mnt/time-machine/'
-      command: "-p -I /samba.conf -u \"${TM_USER:?err};${TM_PASS:?err}\" -s \"samba;/mnt/time-machine/;yes;no;no;$USER\""
+      command: "-p -n -I /samba.conf -u \"${TM_USER:?err};${TM_PASS:?err}\" -s \"samba;/mnt/time-machine/;yes;no;no;$USER\""
       
   plex:
     image: plexinc/pms-docker
