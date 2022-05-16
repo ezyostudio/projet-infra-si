@@ -1,5 +1,17 @@
 version: "3.9"
 services:
+  timemachine:
+      image: dperson/samba
+      container_name: timemachine
+      restart: always
+      ports:
+        - '139:139'
+        - '445:445'
+      volumes:
+        - './timemachine/samba.conf:/samba.conf'
+        - './timemachine/data:/mnt/time-machine/'
+      command: "-p -I /samba.conf -u \"${TM_USER:?err};${TM_PASS:?err}\" -s \"samba;/mnt/time-machine/;yes;no;no;$USER\""
+      
   plex:
     image: plexinc/pms-docker
     container_name: plex
