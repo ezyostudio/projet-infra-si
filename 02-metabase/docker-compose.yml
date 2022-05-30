@@ -29,12 +29,12 @@ services:
         - '32414:32414/udp'
     environment:
         - TZ=<timezone>
-        - PLEX_CLAIM=<claimToken>
         - ADVERTISE_IP=http://station/
     volumes:
         - ./plex/config:/config
-        - ./plex/transcode:/transcode
-        - ./medias:/movies
+        - ./plex/transcode:/data/transcode
+        - ./medias/movies:/data/movies
+        - ./medias/tvshows:/data/tvshows
   radarr:
     image: linuxserver/radarr
     container_name: radarr
@@ -45,8 +45,8 @@ services:
     volumes:
       - ./scripts:/scripts
       - ./radarr/config:/config
-      - ./medias:/movies #optional
-      - ./radarr/downloads:/downloads #optional
+      - ./medias/movies:/movies
+      - ./radarr/downloads:/downloads
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -60,12 +60,29 @@ services:
     volumes:
       - ./scripts:/scripts
       - ./sonarr/config:/config
-      - ./medias:/tv #optional
-      - ./sonarr/downloads:/downloads #optional
+      - ./medias/tvshows:/tv
+      - ./sonarr/downloads:/downloads
     ports:
       - 8989:8989
     restart: unless-stopped
 
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - TRANSMISSION_WEB_HOME=/transmission/ 
+    volumes:
+      - /transmission/data:/config
+      - /transmission/downloads:/downloads
+      - /transmission/watch:/watch
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
 networks: 
   default: 
     name: infra-si
